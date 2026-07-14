@@ -1,0 +1,14 @@
+# Local/generated game data
+output/
+backups/
+*.log
+
+# Local configuration / secrets
+.env
+.env.*
+*.local
+
+# Dependencies and OS files
+node_modules/
+.DS_Store
+Thumbs.db

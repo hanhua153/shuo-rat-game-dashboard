@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rat Game Drop Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,"Microsoft YaHei",sans-serif;background:#020617;color:#e5e7eb;height:100vh;overflow:hidden}.app{height:100vh;display:grid;grid-template-columns:430px minmax(620px,1fr) 320px;gap:10px;padding:10px}.panel{background:#0f172a;border:1px solid #334155;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.28)}.left{display:flex;flex-direction:column;min-height:0}.center{display:grid;grid-template-rows:1fr 240px;gap:10px;min-height:0}.mapPanel{position:relative;min-height:0}.right{padding:14px;overflow:auto}.tabs{display:flex;border-bottom:1px solid #334155}.tab{flex:1;padding:11px 8px;border:0;background:#1f2937;color:#cbd5e1;cursor:pointer;font-weight:700}.tab.active{background:#2563eb;color:white}.tableWrap{overflow:auto;flex:1;min-height:0}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid #263244;text-align:left;vertical-align:top}th{position:sticky;top:0;background:#172033;z-index:1}.pill{display:inline-block;padding:2px 7px;border-radius:999px;font-size:12px;white-space:nowrap}.off{background:#064e3b;color:#a7f3d0}.on{background:#7c2d12;color:#fed7aa}.route{background:#7f1d1d;color:#fecaca}.near{background:#312e81;color:#c4b5fd}.map{width:100%;height:100%;display:block;background:#020617;border-radius:14px;cursor:crosshair}.infoCard{position:absolute;background:rgba(15,23,42,.96);border:1px solid #60a5fa;border-radius:12px;padding:10px 12px;font-size:13px;box-shadow:0 10px 32px rgba(0,0,0,.45);max-width:320px;display:none;z-index:5;pointer-events:none}.infoCard h3{margin:0 0 6px;font-size:16px}.params h2{margin:0 0 12px}.params label{display:block;margin:11px 0 5px;color:#cbd5e1;font-size:13px}.params input{width:100%;padding:9px;border-radius:8px;border:1px solid #475569;background:#020617;color:#e5e7eb}.params .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.checkLabel{display:flex!important;gap:8px;align-items:center;margin-top:4px!important}.checkLabel input{width:auto}.more{margin-top:14px;border-top:1px solid #334155;padding-top:10px}.more summary{cursor:pointer;color:#93c5fd;font-weight:700}.btn{width:100%;margin:12px 0 4px;padding:11px 14px;border:0;border-radius:10px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:white;font-weight:900;cursor:pointer}.btn:disabled{opacity:.55;cursor:wait}.buttonRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.buttonRow .btn{margin:12px 0 4px}.customBtn{background:linear-gradient(135deg,#0891b2,#16a34a)}.customBtn.active{background:linear-gradient(135deg,#ea580c,#dc2626)}.customSelectBadge{fill:#fef08a;stroke:#020617;stroke-width:2}.customOrderText{font-weight:900;fill:#020617;font-size:18px;text-anchor:middle;dominant-baseline:central}.summaryBar{display:grid;grid-template-columns:1fr 1.75fr 1fr 1fr;gap:8px;padding:8px;align-items:stretch}.summaryCard{background:#020617;border:1px solid #334155;border-radius:11px;padding:6px 8px;display:flex;flex-direction:column;justify-content:center;font-size:12px;min-width:0}.summaryCard b{font-size:13px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25}.statusLine{font-size:12px;color:#93c5fd;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.legend{position:absolute;left:12px;top:12px;background:rgba(2,6,23,.82);padding:8px;border-radius:10px;font-size:12px;border:1px solid rgba(148,163,184,.28);display:grid;grid-template-columns:max-content;gap:6px}.filterItem{cursor:pointer;user-select:none;color:#cbd5e1}.filterItem.offFilter{opacity:.38;text-decoration:line-through}.dot{display:inline-block;width:10px;height:10px;border-radius:99px;margin-right:4px}.green{background:#10b981}.orange{background:#f97316}.red{background:#ef4444}.blue{background:#3b82f6}.yellow{background:#facc15}.cyan{background:#a5f3fc}.brandSmall{font-size:13px;color:#94a3b8;margin-bottom:10px}.routeHint{font-size:13px;color:#cbd5e1;margin-top:10px;line-height:1.4}.routeRow{display:grid;grid-template-columns:70px 1fr 1.2fr 90px;gap:6px;padding:5px 8px;border-radius:8px;font-size:12px;align-items:center}.routeRow.hdr{font-weight:700;color:#94a3b8;font-size:11px}.routeRow:not(.hdr){background:#020617;border:1px solid #334155;margin-bottom:3px}.routeRow .rname{font-weight:800}.routeRow .rval{text-align:center;font-size:13px}.routeRow .rval b{font-size:14px}.routeNote{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;font-size:12px}.routeNote span{background:#020617;border:1px solid #334155;border-radius:999px;padding:3px 8px;color:#cbd5e1}.logBox{margin-top:12px;padding-top:10px;border-top:1px solid #334155}.logTitle{font-weight:800;color:#93c5fd;margin-bottom:6px}.logLine{font-size:12px;line-height:1.45;color:#cbd5e1}.logLine .time{color:#94a3b8}.logLine.warn{color:#fbbf24;font-weight:800}.logLine.success{color:#34d399}.warnBox{margin-top:8px;padding:8px;border:1px solid #f59e0b;border-radius:10px;background:rgba(120,53,15,.35);color:#fde68a;font-weight:800;font-size:13px}.emojiTitle{font-size:20px}.verb-static{color:#34d399}.verb-route{color:#f87171}.verb-online{color:#fb923c}.verb-param{color:#93c5fd}.verb-start{color:#60a5fa}.origin{background:#1e3a5f;color:#93c5fd}.clusterRow{cursor:pointer;transition:background .15s}.clusterRow:hover{background:rgba(37,99,235,.1)}.memberRow{background:rgba(2,6,23,.5)}.memberRow td{font-size:12px;padding:4px 8px 4px 24px}.searchBox{margin:6px 8px}.searchBox input{width:100%;padding:7px 10px;border-radius:8px;border:1px solid #475569;background:#020617;color:#e5e7eb;font-size:13px}.infoCard .memberTable{width:100%;margin-top:6px;border-collapse:collapse}.infoCard .memberTable td,.infoCard .memberTable th{padding:3px 6px;font-size:12px;border-bottom:1px solid #263244}@media(max-width:1200px){.app{grid-template-columns:390px minmax(520px,1fr) 290px}.summaryCard b{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="panel left">
+    <div class="tabs"><button class="tab active" data-tab="clusters">🟢 团</button><button class="tab" data-tab="online">🟠 在线</button><button class="tab" data-tab="route">🔴 路线</button></div>
+    <div class="searchBox"><input id="searchInput" type="text" placeholder="🔍 搜索团名或玩家名..." /></div>
+    <div id="table" class="tableWrap"></div>
+  </section>
+  <main class="center">
+    <section class="panel mapPanel"><svg id="map" class="map" viewBox="0 0 2000 2000"></svg><div class="legend" id="filterBar"><div class="filterItem" data-filter="glow"><span class="dot cyan"></span>辉光</div><div class="filterItem" data-filter="labels"><span class="dot yellow"></span>Drop数字</div><div class="filterItem" data-filter="path"><span class="dot red"></span>路径</div><div class="filterItem" data-filter="corridor"><span class="dot cyan"></span>路径范围</div><div class="filterItem" data-filter="addon"><span class="dot yellow"></span>附加Drop玩家</div><div class="filterItem" data-filter="online"><span class="dot orange"></span>在线移动</div><div class="filterItem" data-filter="clusters"><span class="dot green"></span>静止团</div><div class="filterItem" data-filter="barren"><span class="dot" style="background:#94a3b8"></span>贫瘠团</div><div class="filterItem" data-filter="start"><span class="dot blue"></span>路线起点</div></div><div id="infoCard" class="infoCard"></div></section>
+    <section class="panel summaryBar" style="display:flex;flex-direction:column;gap:4px;padding:8px 12px"><div id="routeTable" style="width:100%"></div></section>
+  </main>
+  <aside class="panel right params">
+    <h2><span class="emojiTitle">⚙️</span> 自定义参数</h2>
+    <div class="brandSmall">🗺️ 地图中心为原点，右 +x，下 +y</div>
+    <label class="checkLabel"><input id="customStart" type="checkbox"> 🎯 使用自定义初始位置</label>
+    <div class="row"><div><label>初始 X（游戏m）</label><input id="startX" type="number" value="0"></div><div><label>初始 Y（游戏m）</label><input id="startY" type="number" value="0"></div></div>
+    <label>⚡ 体力（1体力 = 10m）</label><input id="routeMaxM" type="number" value="1500"><div class="brandSmall">留点体力用于打人</div>
+    <label>💰 Drop 低于/等于多少不统计</label><input id="minDrop" type="number" value="15">
+    <div class="buttonRow"><button id="fetchPlayers" class="btn">🔄 刷新数据</button><button id="planRoute" class="btn">📐 重新规划</button></div><button id="customRouteBtn" class="btn customBtn" style="margin-top:4px">🧭 自定义路径</button>
+    <details class="more"><summary>🧩 更多参数</summary><label>🚫 原点半径多少 m 内不统计</label><input id="excludeRadiusM" type="number" value="150"><label>⏱️ 在线检测等待毫秒</label><input id="delayMs" type="number" value="3000"><label>🔎 地图显示半径 m</label><input id="mapRadiusM" type="number" value="1000"><label>🪪 卡片合并距离 m</label><input id="clusterRadiusM" type="number" value="20"><label>📡 在线玩家附近标记半径 m</label><input id="nearbyRadiusM" type="number" value="50"><label>🚷 在线玩家避让半径 m</label><input id="activeAvoidRadiusM" type="number" value="50"><label>✨ 附加 Drop 阈值</label><input id="addonMinDrop" type="number" value="5"><label>🛣️ 路径宽度 m</label><input id="corridorWidthM" type="number" value="50"><label>🙋 自己的名称（可选，逗号分隔）</label><input id="selfName" type="text" placeholder="用于自动以自己为起点"><label>🪪 自己的 user_id（可选，逗号分隔）</label><input id="selfUserId" type="text" placeholder="名称不稳定时可填写"></details>
+    <div id="routeHint" class="routeHint"></div><div id="warningBox" class="warnBox" style="display:none"></div><div class="logBox"><div class="logTitle">📜 运行日志</div><div id="runLog"></div></div>
+  </aside>
+</div>
+<script>
+let data=null, activeTab='clusters', selectedPoint=null;
+const SAVED_PARAMS_KEY='rat-drop-dashboard-params-v1';
+let expandedClusters=new Set();
+function toggleClusterExpand(id){if(expandedClusters.has(id))expandedClusters.delete(id);else expandedClusters.add(id);renderTable();}
+let customMode=false, customSelectedIds=[];
+let viewBox={x:0,y:0,w:2000,h:2000};
+const filters={glow:true,labels:true,path:true,corridor:true,addon:true,online:true,clusters:true,barren:true,start:true};
+const $=id=>document.getElementById(id); const fmt=n=>(Math.round(Number(n)*10)/10).toString(); const displayCoord=n=>fmt(Number(n)*10)+'m'; const displayStamina=n=>fmt(n)+'体力';
+function val(id, fallback){const el=$(id); return el ? el.value : fallback;}
+function params(includeCustomRoute=false){const p={minDrop:val('minDrop',15),excludeRadiusM:val('excludeRadiusM',150),delayMs:val('delayMs',3000),routeMaxM:val('routeMaxM',1500),clusterRadiusM:val('clusterRadiusM',20),nearbyRadiusM:val('nearbyRadiusM',50),activeAvoidRadiusM:val('activeAvoidRadiusM',50),addonMinDrop:val('addonMinDrop',5),corridorWidthM:val('corridorWidthM',50),selfName:val('selfName',''),selfUserId:val('selfUserId',''),customStart:$('customStart').checked,startX:Number(val('startX',0))/10,startY:Number(val('startY',0))/10}; if(includeCustomRoute&&customSelectedIds.length)p.customRouteIds=customSelectedIds.join(','); return p;}
+function saveParams(){try{const saved={};document.querySelectorAll('.params input').forEach(el=>saved[el.id]=el.type==='checkbox'?el.checked:el.value);localStorage.setItem(SAVED_PARAMS_KEY,JSON.stringify(saved));}catch(e){console.warn('保存参数失败',e);}}
+function restoreParams(){try{const saved=JSON.parse(localStorage.getItem(SAVED_PARAMS_KEY)||'{}');Object.entries(saved).forEach(([id,value])=>{const el=$(id);if(el)el.type==='checkbox'?el.checked=Boolean(value):el.value=value;});}catch(e){console.warn('读取已保存参数失败',e);}}
+async function fetchPlayers(){const b=$('fetchPlayers');b.disabled=true;$('planRoute').disabled=true;$('customRouteBtn').disabled=true;$('runLog').innerHTML='<div class="logLine"><span class="time">'+new Date().toLocaleTimeString('zh-CN',{hour12:false})+'</span> <b>正在获取当前游戏玩家信息...</b></div>';$('infoCard').style.display='none';selectedPoint=null;saveParams();try{const qs=new URLSearchParams(params(false));const r=await fetch('/api/players?'+qs);const d=await r.json();if(!r.ok)throw new Error(d.error||r.statusText);data=d;appendLog('玩家数据获取完成，共 '+d.counts.clusters+' 个团、'+d.counts.online+' 名在线玩家','success');await planRoute();}catch(e){const msg=String(e.message||e);const simple=/Recv failure: Connection was reset|ECONNRESET/i.test(msg)?'游戏接口连接被重置；已自动优先尝试本机代理与直连。请确认 Clash 正在运行后重试。':msg;appendLog('获取失败：'+simple,'warn');console.error(e);}finally{$('fetchPlayers').disabled=false;$('planRoute').disabled=false;$('customRouteBtn').disabled=false;renderCustomButton();}}
+async function planRoute(useCustomRoute=false){if(!data){appendLog('还没有获取玩家数据，请先点击刷新数据。','warn');return;}const b=useCustomRoute?$('customRouteBtn'):$('planRoute');b.disabled=true;$('fetchPlayers').disabled=true;$('planRoute').disabled=true;$('customRouteBtn').disabled=true;appendLog(useCustomRoute?'计算自定义路径':'正在重新规划路线...','info');try{const qs=new URLSearchParams(params(useCustomRoute));const r=await fetch('/api/plan?'+qs);const d=await r.json();if(!r.ok)throw new Error(d.error||r.statusText);data=d;if(useCustomRoute){customMode=false;customSelectedIds=[];}render();}catch(e){appendLog('规划失败：'+e.message,'warn');console.error(e);}finally{$('fetchPlayers').disabled=false;$('planRoute').disabled=false;$('customRouteBtn').disabled=false;renderCustomButton();}}
+function isRouteStart(p){return data?.routes?.some(r=>r.route.length&&r.route[0].id===p.id);}
+const ROUTE_COLORS=['#f43f5e','#a855f7','#06b6d4'];function getRouteIdx(p){if(!data||!data.routes)return -1;for(let i=0;i<data.routes.length;i++){if(data.routes[i].route.some(x=>x.id===p.id))return i;}return -1;}function color(p){if(isRouteStart(p))return '#3b82f6'; if(p.status==='online')return '#f97316'; const ri=getRouteIdx(p);if(ri>=0)return ROUTE_COLORS[ri]; if(p.inRoute)return '#ef4444'; return '#10b981';}
+function glow(p){return Math.max(18, Math.min(120, 14 + Math.sqrt(Math.max(0,p.drop))*6));}
+function sx(x){const r=Number(val('mapRadiusM',1000));return 1000+x*(1000/r)} function sy(y){const r=Number(val('mapRadiusM',1000));return 1000+y*(1000/r)}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function allPoints(){const routeAddons=(data?.routes||[]).flatMap(r=>r.addonPlayers||[]);return [...(data?.clusterPoints||data?.offline||[]),...(data?.barrenClusterPoints||[]),...(data?.online||[]),...routeAddons];}
+function mainPoints(){return [...(data?.clusterPoints||data?.offline||[]),...(data?.online||[])];}
+function renderCustomButton(){const b=$('customRouteBtn'); if(!b)return; b.classList.toggle('active',customMode); b.textContent=customMode?`🧭 计算路径(${customSelectedIds.length})`:'🧭 自定义模式';}
+function toggleCustomSelection(id){const p=allPoints().find(x=>x.id===id); if(!p)return; if(p.status==='online'){appendLog('在线/移动玩家不能作为自定义路径节点，请选择静止玩家。','warn'); showInfoById(id); return;} const i=customSelectedIds.indexOf(id); if(i>=0)customSelectedIds.splice(i,1); else customSelectedIds.push(id); selectedPoint=p; renderMap(); renderCustomButton();}
+function appendLog(text,level='info'){const box=$('runLog'); if(!box)return; box.innerHTML+='<div class="logLine '+level+'"><span class="time">'+new Date().toLocaleTimeString('zh-CN',{hour12:false})+'</span> '+esc(text)+'</div>';}
+function customOrder(id){const i=customSelectedIds.indexOf(id); return i>=0?i+1:0;}
+
+function mapToScreen(mx,my){const svg=$('map'), box=svg.getBoundingClientRect();return {x:(mx-viewBox.x)/viewBox.w*box.width,y:(my-viewBox.y)/viewBox.h*box.height,box};}
+function showInfoById(id){const p=allPoints().find(x=>x.id===id); if(!p)return; selectedPoint=p; const card=$('infoCard');
+  const near=p.status==='online'&&p.inOriginExcludedZone?' · 原点范围内活跃':'';
+  const isCluster=p.isCluster||(data?.clusterPoints?.some(c=>c.id===id));
+  if(p.status==='online'){
+    const sta=(p.sta/1000).toFixed(1);
+    card.innerHTML=`<h3>🟠 ${esc(p.name)}</h3><div>坐标：<b>${displayCoord(p.mx)}, ${displayCoord(p.my)}</b></div><div>Drop：<b>${p.drop}</b></div><div>状态：<span class="verb-online">在线 ${sta}s</span>${near}</div>${p.moveDist>0.01?`<div>移动：${displayCoord(p.moveDist)} 方向${(p.moveAngle*180/Math.PI).toFixed(0)}°</div>`:''}`;
+  } else {
+    const cl=data?.clusters?.find(c=>c.id===id)||data?.barrenClusters?.find(c=>c.id===id)||{name:p.name,drop:p.drop,cx:p.mx,cy:p.my,members:[]};
+    const icon=p.isBarren?'⚪':isRouteStart(p)?'🔵':p.inRoute?'🔴':'🟢';
+    const originTag=cl.isOrigin?' <span class="pill origin">原点</span>':'';
+    let html=`<h3>${icon} ${p.isBarren?'贫瘠团':esc(cl.name||p.name)}${originTag}</h3><div>球心：<b>${displayCoord(cl.cx||p.mx)}, ${displayCoord(cl.cy||p.my)}</b></div><div>总Drop：<b>${cl.drop||p.drop}</b></div><div>成员：${(cl.members||[]).length} 人</div>`;
+    const big=(cl.members||[]).filter(m=>m.drop>15);
+    if(big.length){html+='<div style="margin-top:6px;font-weight:700;color:#fbbf24">Drop>15 成员：</div><table class="memberTable"><thead><tr><th>名称</th><th>Drop</th><th>HP</th></tr></thead><tbody>';
+    for(const m of big)html+=`<tr><td>${esc(m.name)}</td><td>${m.drop}</td><td>${m.hp||'?'}</td></tr>`;html+='</tbody></table>';}
+    card.innerHTML=html;
+  }
+  const pos=mapToScreen(sx(p.mx),sy(p.my)); card.style.display='block'; const cw=card.offsetWidth||260,ch=card.offsetHeight||120; let left=pos.x+16, top=pos.y-10; if(left+cw>pos.box.width-8) left=pos.x-cw-16; if(top+ch>pos.box.height-8) top=pos.box.height-ch-8; if(top<8) top=8; card.style.left=left+'px'; card.style.top=top+'px';}
+function renderMap(){const svg=$('map'); svg.innerHTML=''; svg.setAttribute('viewBox',`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`); const zoomScale=viewBox.w/2000; const r=Number(val('mapRadiusM',1000)); let grid=''; const gridStep=100; for(let m=Math.ceil(-r/gridStep)*gridStep;m<=r;m+=gridStep){const major=Math.abs(m%500)<1e-9;grid+=`<line x1="${sx(m)}" y1="0" x2="${sx(m)}" y2="2000" stroke="${major?'#475569':'#334155'}" stroke-width="${major?1.8:1.1}" opacity="${major?0.9:0.68}" vector-effect="non-scaling-stroke"/><line x1="0" y1="${sy(m)}" x2="2000" y2="${sy(m)}" stroke="${major?'#475569':'#334155'}" stroke-width="${major?1.8:1.1}" opacity="${major?0.9:0.68}" vector-effect="non-scaling-stroke"/>`;} for(let gx=Math.ceil(-r/gridStep)*gridStep;gx<=r;gx+=gridStep){for(let gy=Math.ceil(-r/gridStep)*gridStep;gy<=r;gy+=gridStep){grid+=`<text x="${sx(gx)+4}" y="${sy(gy)-4}" text-anchor="start" dominant-baseline="auto" font-size="16" fill="#dbeafe" opacity="0.42" font-weight="700">(${Math.round(gx/100)},${Math.round(gy/100)})</text>`;}}
+let routeLine='', corridorLine='';
+  if(data.routes){
+    for(let ri=0;ri<data.routes.length;ri++){
+      const rr=data.routes[ri];
+      if(!rr.route.length)continue;
+      const pts=[];
+      if(data.params.start) pts.push(sx(data.params.start.mx)+','+sy(data.params.start.my));
+      pts.push(...rr.route.map(p=>sx(p.mx)+','+sy(p.my)));
+      const pw=(data.params.corridorWidthM||50)*(1000/Number(val('mapRadiusM',1000)));
+      if(filters.corridor)corridorLine+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#a5f3fc" stroke-width="'+pw+'" stroke-linecap="round" stroke-linejoin="round" opacity="0.18"/>';
+      if(filters.path)routeLine+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+ROUTE_COLORS[ri]+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#routeGlow)"/>';
+    }
+  }
+let marks=''; for(const p of allPoints()){if(p.isBarren&&!filters.barren)continue;if(p.isAddon&&!filters.addon)continue;if(p.status==='online'&&!filters.online)continue;if(!p.isBarren&&!p.isAddon&&p.status==='offline'&&!p.inRoute&&!filters.clusters)continue;if(isRouteStart(p)&&!filters.start)continue;const x=sx(p.mx), y=sy(p.my), c=p.isBarren?'#94a3b8':p.isAddon?'#facc15':color(p), gr=glow(p), pr=p.isBarren?10*zoomScale:(p.isAddon?8*zoomScale:(isRouteStart(p)?24*zoomScale:(p.inRoute?18*zoomScale:14*zoomScale))), labelSize=28*zoomScale, labelY=y+38*zoomScale, labelStroke=5*zoomScale; let glowSvg=''; if(!p.isBarren&&!p.isAddon&&filters.glow){if(p.status==='online'&&p.hasDirection){const ang=p.moveAngle,spread=Math.PI/6,rr=Math.max(gr*1.35,80*zoomScale),a1=ang-spread,a2=ang+spread,x1=x+Math.cos(a1)*rr,y1=y+Math.sin(a1)*rr,x2=x+Math.cos(a2)*rr,y2=y+Math.sin(a2)*rr;glowSvg=`<path d="M ${x} ${y} L ${x1} ${y1} A ${rr} ${rr} 0 0 1 ${x2} ${y2} Z" fill="${c}" opacity="0.34"/><path d="M ${x} ${y} L ${x+Math.cos(ang)*rr} ${y+Math.sin(ang)*rr}" stroke="${c}" stroke-width="${4*zoomScale}" opacity="0.9" stroke-linecap="round"/>`;}else{glowSvg=`<circle cx="${x}" cy="${y}" r="${gr}" fill="${c}" opacity="0.18"/><circle cx="${x}" cy="${y}" r="${Math.max(10,gr/2)}" fill="${c}" opacity="0.12"/>`;}} const labelSvg=!p.isBarren&&filters.labels?`<text x="${x}" y="${labelY}" text-anchor="middle" font-size="${labelSize}" font-weight="900" fill="#fbbf24" stroke="#020617" stroke-width="${labelStroke}" paint-order="stroke">${p.drop}</text>`:''; const order=customOrder(p.id); const customSvg=order?`<circle cx="${x+18*zoomScale}" cy="${y-18*zoomScale}" r="${13*zoomScale}" class="customSelectBadge"/><text x="${x+18*zoomScale}" y="${y-18*zoomScale}" class="customOrderText" font-size="${18*zoomScale}">${order}</text><circle cx="${x}" cy="${y}" r="${30*zoomScale}" fill="none" stroke="#fef08a" stroke-width="${4*zoomScale}"/>`:''; marks+=`<g class="point" data-id="${esc(p.id)}" style="cursor:pointer">${glowSvg}<circle cx="${x}" cy="${y}" r="${pr}" fill="${c}" stroke="#e5e7eb" stroke-width="1.4"/>${customSvg}${labelSvg}<title>${p.isBarren?'贫瘠团':esc(p.name)} (${displayCoord(p.mx)}, ${displayCoord(p.my)})${p.isBarren?'':' Drop '+p.drop}</title></g>`;}
+if(selectedPoint){const hx=sx(selectedPoint.mx),hy=sy(selectedPoint.my);marks+=`<circle cx="${hx}" cy="${hy}" r="${26*zoomScale}" fill="none" stroke="#fef08a" stroke-width="${5*zoomScale}" stroke-dasharray="${9*zoomScale} ${6*zoomScale}"/>`;}
+if(data.params.start)marks+=`<rect x="${sx(data.params.start.mx)-8}" y="${sy(data.params.start.my)-8}" width="16" height="16" rx="3" fill="#3b82f6"><title>${esc(data.params.start.name||'路线起点')}</title></rect>`;
+svg.innerHTML=`<defs><filter id="routeGlow"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#fb7185" flood-opacity=".85"/></filter><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#f43f5e"/></marker><radialGradient id="bg" cx="50%" cy="50%" r="75%"><stop offset="0%" stop-color="#172554"/><stop offset="55%" stop-color="#020617"/><stop offset="100%" stop-color="#000"/></radialGradient></defs><rect width="2000" height="2000" fill="url(#bg)"/>${grid}<line x1="1000" y1="0" x2="1000" y2="2000" stroke="#64748b" stroke-width="2"/><line x1="0" y1="1000" x2="2000" y2="1000" stroke="#64748b" stroke-width="2"/><circle cx="1000" cy="1000" r="${1000*data.params.excludeRadiusM/r}" fill="rgba(30,41,59,.28)" stroke="#94a3b8" stroke-dasharray="10 8" stroke-width="3"/>${corridorLine}${routeLine}${marks}`;
+svg.querySelectorAll('.point').forEach(g=>g.addEventListener('click',(ev)=>{ev.stopPropagation(); if(customMode)toggleCustomSelection(g.dataset.id); else showInfoById(g.dataset.id);})); if(selectedPoint&&!customMode) showInfoById(selectedPoint.id);}
+function statusText(p){if(p.status==='online')return p.inOriginExcludedZone?'<span class="pill on">在线·原点内</span>':'<span class="pill on">在线</span>';return p.inRoute?'<span class="pill route">路线</span>':'<span class="pill off">静止</span>';}
+function renderTable(){let rows=[]; const search=($('searchInput').value||'').trim().toLowerCase();
+  if(activeTab==='clusters'){
+    const pts=data.clusterPoints||data.offline||[];
+    for(const p of pts){
+      if(search&&!p.name.toLowerCase().includes(search)){const cl=(data.clusters||[]).find(c=>c.id===p.id);if(!cl||!cl.members)continue;if(!cl.members.some(m=>m.name.toLowerCase().includes(search)))continue;}
+      const cl=(data.clusters||[]).find(c=>c.id===p.id)||{members:[]};
+      const mc=cl.members.length; const cs=p.inRoute?'color:#ef4444':isRouteStart(p)?'color:#3b82f6':'color:#10b981';
+      const originTag=p.isOrigin?' <span class="pill origin">原点</span>':'';
+      rows.push(`<tr class="clusterRow" onclick="toggleClusterExpand('${esc(p.id)}')" style="${cs}"><td>${esc(p.name)}${originTag}</td><td>${displayCoord(p.mx)}, ${displayCoord(p.my)}</td><td>${p.drop}</td><td>${mc}人</td></tr>`);
+      if(expandedClusters.has(p.id)){ 
+        const big=cl.members.filter(m=>m.drop>15);
+        if(!big.length)rows.push('<tr class="memberRow"><td colspan="4" style="color:#94a3b8">无 Drop>15 成员</td></tr>');
+        else for(const m of big)rows.push(`<tr class="memberRow"><td>↳ ${esc(m.name)}</td><td>${displayCoord(m.mx)}, ${displayCoord(m.my)}</td><td>${m.drop}</td><td>HP ${m.hp||'?'}</td></tr>`);
+      }
+    }
+    if(!rows.length)rows.push('<tr><td colspan="4" style="color:#94a3b8">没有匹配的团</td></tr>');
+  }
+  if(activeTab==='online'){
+    const ol=(data.online||[]).filter(o=>!search||o.name.toLowerCase().includes(search));
+    if(!ol.length)rows.push('<tr><td colspan="4" style="color:#94a3b8">没有匹配的在线玩家</td></tr>');
+    else for(const o of ol){const sta=(o.sta/1000).toFixed(1);const near=o.nearby?.length?`<br><span class="pill near">附近 ${o.nearby.length} 团</span> `+o.nearby.map(n=>esc(n.name)+' D'+n.drop).join(' / '):'';rows.push(`<tr><td>${esc(o.name)}</td><td>${displayCoord(o.mx)}, ${displayCoord(o.my)}</td><td>${o.drop}</td><td>STA ${sta}s${near}</td></tr>`);}
+  }
+  if(activeTab==='route'){
+    const rn=['路线一','路线二','路线三'];
+    if(data.routes){for(let ri=0;ri<data.routes.length;ri++){const rr=data.routes[ri];if(!rr.route.length)continue;rows.push('<tr><td colspan="4" style="background:#1e293b;color:'+ROUTE_COLORS[ri]+';font-weight:800">'+rn[ri]+'（'+rr.route.length+'团 收益'+fmt(rr.profitDrop)+'）</td></tr>');rows.push(...rr.route.map((p,i)=>'<tr><td>'+(i+1)+'. '+esc(p.name)+'</td><td>'+displayCoord(p.mx)+', '+displayCoord(p.my)+'</td><td>'+p.drop+'</td><td>'+(i===0?'起点':i===rr.route.length-1?'终点':'团')+'</td></tr>'));if(rr.addonPlayers.length)rows.push(...rr.addonPlayers.map(p=>'<tr><td>附加 '+esc(p.name)+'</td><td>'+displayCoord(p.mx)+', '+displayCoord(p.my)+'</td><td>'+p.drop+'</td><td><span class="pill near">附加</span></td></tr>'));}}
+  }
+$('table').innerHTML=`<table><thead><tr><th>${activeTab==='clusters'?'团名':'玩家'}</th><th>坐标(m)</th><th>Drop</th><th>${activeTab==='clusters'?'人数':'状态/备注'}</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;}
+function renderSummary(){
+  const totalP=data.totalProfitDrop||data.profitDrop||0;
+  const routeCount=data.routes?data.routes.filter(r=>r.route.length).length:0;
+  const rn=['一','二','三'];
+  let tbl='<div class="routeRow hdr"><div>路线</div><div>节点</div><div>收益</div><div>距离</div></div>';
+  if(data.routes){
+    for(let i=0;i<data.routes.length;i++){
+      const r=data.routes[i];
+      const c=ROUTE_COLORS[i];
+      if(!r.route.length){
+        tbl+='<div class="routeRow"><div class="rname" style="color:'+c+'">路线'+rn[i]+'</div><div>-</div><div>-</div><div>-</div></div>';
+      } else {
+        const names=r.route.map(p=>p.name).join(' → ');
+        const warn=[];const threat=r.originThreats;if(threat?.online?.length)warn.push('原点附近在线 '+threat.online.map(p=>esc(p.name)).join('、'));if(threat?.highDrop?.length)warn.push('原点内高Drop>15 '+threat.highDrop.map(p=>esc(p.name)).join('、'));
+        tbl+='<div class="routeRow"><div class="rname" style="color:'+c+'">路线'+rn[i]+'</div><div title="'+esc(names)+'">'+r.route.length+' 团 + 附加'+r.addonPlayers.length+(warn.length?'<br><span style="color:#fbbf24;font-size:11px">⚠️ '+warn.join('；')+'</span>':'')+'</div><div class="rval">（主'+r.routeDrop+' + 附'+r.addonDrop+'）/2 = <b>'+fmt(r.profitDrop)+'</b></div><div>'+displayStamina(r.routeLength)+'</div></div>';
+      }
+    }
+  }
+  const tc=data.counts.routeClusters||data.counts.routePlayers||0;
+  const ta=data.counts.addonClusters||data.counts.addonPlayers||0;
+  if(routeCount>1){
+    tbl+='<div class="routeRow" style="border:1px solid #60a5fa;background:rgba(37,99,235,.1)"><div class="rname" style="color:#60a5fa">合计</div><div>'+tc+' 团 + 附加'+ta+'</div><div class="rval">（主'+fmt(data.totalMainDrop||0)+' + 附'+fmt(data.totalAddonDrop||0)+'）/2 = <b>'+fmt(totalP)+'</b></div><div>-</div></div>';
+  }
+  const validRoutes=(data.routes||[]).map((r,i)=>({r,i,totalPlayers:(r.route?r.route.length:0)+(r.addonPlayers?r.addonPlayers.length:0)})).filter(x=>x.r.route&&x.r.route.length);
+  if(validRoutes.length){
+    const shortest=validRoutes.reduce((a,b)=>b.r.routeLength<a.r.routeLength?b:a);
+    const richest=validRoutes.reduce((a,b)=>b.r.profitDrop>a.r.profitDrop?b:a);
+    const fewest=validRoutes.reduce((a,b)=>b.totalPlayers<a.totalPlayers?b:a);
+    tbl+='<div class="routeNote"><span>最短：路线'+rn[shortest.i]+'（'+displayStamina(shortest.r.routeLength)+'）</span><span>收益最多：路线'+rn[richest.i]+'（'+fmt(richest.r.profitDrop)+' Drop）</span><span>团最少：路线'+rn[fewest.i]+'（'+fewest.totalPlayers+'个，团'+fewest.r.route.length+'+附加'+fewest.r.addonPlayers.length+'）</span></div>';
+  }
+  if(data.params.selfStartUsed)tbl+='<div style="color:#60a5fa;font-size:11px;margin-top:4px">📍 已以自己为起点，忽略自身 Drop</div>';
+  $('routeTable').innerHTML=tbl;
+  let hint='';
+  if(data.customRouteError){hint='<div style="color:#fbbf24;margin-top:6px">⚠️ 自定义路径无法连接：<b>'+esc(data.customRouteError)+'</b></div>';}
+  $('routeHint').innerHTML=hint;
+  $('warningBox').style.display=data.warnings&&data.warnings.length?'block':'none';
+  $('warningBox').innerHTML=(data.warnings||[]).map(esc).join('<br>');
+  $('runLog').innerHTML=(data.logs||[]).map(function(l){
+    return '<div class="logLine '+(l.level||'')+'"><span class="time">'+esc(l.time)+'</span> '+esc(l.text).replace(/(路径规划完成|路线[一二三]|当前有\s*\d+\s*名玩家在线|正在规划路线|正在获取当前游戏玩家信息|玩家数据获取完成)/g,'<b>$1</b>')+'</div>';
+  }).join('');
+}
+function svgPointFromEvent(ev){const svg=$('map'), box=svg.getBoundingClientRect();return {x:viewBox.x+(ev.clientX-box.left)/box.width*viewBox.w,y:viewBox.y+(ev.clientY-box.top)/box.height*viewBox.h};}
+function installMapInteractions(){
+  const svg=$('map');
+  let dragging=false, dragStart=null, vbStart=null, moved=false;
+  svg.addEventListener('click',ev=>{if(moved){moved=false;return;}if(ev.target===svg||ev.target.tagName==='rect'){selectedPoint=null;$('infoCard').style.display='none';}});
+  svg.addEventListener('mousedown',ev=>{if(ev.button!==0)return;if(ev.target.closest&&ev.target.closest('.point'))return;dragging=true;moved=false;dragStart={x:ev.clientX,y:ev.clientY};vbStart={...viewBox};svg.style.cursor='grabbing';ev.preventDefault();});
+  window.addEventListener('mousemove',ev=>{if(!dragging)return;const box=svg.getBoundingClientRect();const dx=(ev.clientX-dragStart.x)/box.width*vbStart.w;const dy=(ev.clientY-dragStart.y)/box.height*vbStart.h;if(Math.abs(ev.clientX-dragStart.x)+Math.abs(ev.clientY-dragStart.y)>3)moved=true;viewBox={...vbStart,x:vbStart.x-dx,y:vbStart.y-dy};renderMap();});
+  window.addEventListener('mouseup',()=>{if(!dragging)return;dragging=false;svg.style.cursor='';});
+  svg.addEventListener('wheel',ev=>{ev.preventDefault();const p=svgPointFromEvent(ev);const factor=ev.deltaY<0?0.82:1.22;const newW=Math.max(180,Math.min(4000,viewBox.w*factor));const newH=newW;const rx=(p.x-viewBox.x)/viewBox.w, ry=(p.y-viewBox.y)/viewBox.h;viewBox={x:p.x-rx*newW,y:p.y-ry*newH,w:newW,h:newH};renderMap();},{passive:false});
+}
+function updateTabCounts(){
+  if(!data)return;
+  const tabs=document.querySelectorAll('.tab');
+  const oc=data.offline?data.offline.length:0;
+  const nc=data.online?data.online.length:0;
+  const rc=data.routes?data.routes.filter(r=>r.route.length).length:0;
+  tabs.forEach(function(t){
+    if(t.dataset.tab==='clusters') t.textContent='\u{1F7E2} \u56E2\uFF08'+oc+'\uFF09';
+    if(t.dataset.tab==='online') t.textContent='\u{1F7E0} \u5728\u7EBF\uFF08'+nc+'\uFF09';
+    if(t.dataset.tab==='route') t.textContent='\u{1F534} \u8DEF\u7EBF\uFF08'+rc+'\uFF09';
+  });
+}
+function render(){updateTabCounts();renderMap();renderTable();renderSummary();}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');activeTab=t.dataset.tab; if(data)renderTable();});
+document.querySelectorAll('.filterItem').forEach(el=>el.onclick=()=>{const k=el.dataset.filter;filters[k]=!filters[k];el.classList.toggle('offFilter',!filters[k]);if(data)renderMap();});
+restoreParams();document.querySelectorAll('.params input').forEach(el=>el.addEventListener('change',saveParams));
+$('fetchPlayers').onclick=()=>fetchPlayers();$('planRoute').onclick=()=>{saveParams();planRoute(false);};$('customRouteBtn').onclick=()=>{if(!customMode){customMode=true;customSelectedIds=[];appendLog('已进入自定义路径模式：点击地图玩家点选择必须经过节点。','info');renderCustomButton();if(data)renderMap();return;} if(!customSelectedIds.length){appendLog('请先在地图上选择至少一个静止玩家点。','warn');return;} saveParams();planRoute(true);}; renderCustomButton(); installMapInteractions(); fetchPlayers();
+</script>
+</body>
+</html>
