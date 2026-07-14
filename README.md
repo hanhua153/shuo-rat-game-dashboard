@@ -80,3 +80,17 @@ http://127.0.0.1:18777/
 ## 免责声明
 
 本项目是本地可视化与路线辅助工具，不保证快照实时性、路线安全性或收益准确性。实际游戏操作请自行判断并承担风险。
+
+---
+
+## 🔗 Linux DO 社区
+
+<div align="center">
+  <a href="https://linux.do" target="_blank">
+    <img src="https://cdn3.ldstatic.com/original/4X/c/c/d/ccd8c210609d498cbeb3d5201d4c259348447562.png" alt="Linux DO" height="60">
+  </a>
+  <p>
+    <a href="https://linux.do" target="_blank"><strong>Linux DO 社区</strong></a><br>
+    <a href="https://linux.do/u/hanhua153" target="_blank">@hanhua153</a>
+  </p>
+</div>
