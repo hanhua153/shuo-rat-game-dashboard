@@ -406,7 +406,9 @@ function processSnapshotResult(s1, s2, ctx) {
     .map(x => x.latest)
     .sort((a, b) => b.drop - a.drop);
   const allOfflinePlayers = nonSelfStatus
-    .filter(x => !x.online)
+    // All offline logic ignores Drop <= 5: no clusters, map markers, route,
+    // addon profit, or barren-cluster distribution calculations.
+    .filter(x => !x.online && x.latest.drop > 5)
     .map(x => x.latest)
     .sort((a, b) => b.drop - a.drop);
   const forbiddenZones = [
