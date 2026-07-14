@@ -339,7 +339,8 @@ function clusterPoints(points, radiusM) {
 }
 function fetchAndProcessPlayers(params) {
   const minDrop = Number(params.minDrop ?? 15);
-  const excludeRadiusM = Number(params.excludeRadiusM ?? 150);
+  // Internal coordinates are one tenth of displayed game metres; default origin range is 1000m.
+  const excludeRadiusM = Number(params.excludeRadiusM ?? 100);
   const delayMs = Number(params.delayMs ?? 3000);
   const moveEpsMm = Number(params.moveEpsMm ?? 0);
   const nearbyRadiusM = Number(params.nearbyRadiusM ?? 50);
