@@ -339,7 +339,7 @@ function clusterPoints(points, radiusM) {
 }
 function fetchAndProcessPlayers(params) {
   const minDrop = Number(params.minDrop ?? 15);
-  // Internal coordinates are one tenth of displayed game metres; default origin range is 1000m.
+  // 内部坐标单位为显示游戏米的 1/10；默认原点范围为显示的 1000m。
   const excludeRadiusM = Number(params.excludeRadiusM ?? 100);
   const delayMs = Number(params.delayMs ?? 3000);
   const moveEpsMm = Number(params.moveEpsMm ?? 0);
@@ -407,8 +407,8 @@ function processSnapshotResult(s1, s2, ctx) {
     .map(x => x.latest)
     .sort((a, b) => b.drop - a.drop);
   const allOfflinePlayers = nonSelfStatus
-    // All offline logic ignores Drop <= 5: no clusters, map markers, route,
-    // addon profit, or barren-cluster distribution calculations.
+    // 所有离线逻辑统一忽略 Drop <= 5 的玩家：不入团、不显示、
+    // 不参与路线、附加收益或贫瘠团分布判断。
     .filter(x => !x.online && x.latest.drop > 5)
     .map(x => x.latest)
     .sort((a, b) => b.drop - a.drop);
@@ -419,7 +419,7 @@ function processSnapshotResult(s1, s2, ctx) {
   // ── 团聚类（仅离线玩家，半径 clusterRadiusM）──
   const clusterList = [];
   const clustered = new Set();
-  // 原点团：原点150m内的Drop>5离线玩家
+  // 原点团：显示游戏坐标原点 1000m 内的 Drop>5 离线玩家。
   const originMembers = offlineDropPlayers.filter(p => p.inOriginExcludedZone);
   if (originMembers.length > 0) {
     originMembers.forEach(p => clustered.add(p.id));
@@ -512,17 +512,28 @@ function planRouteFromCache(playerData, params) {
   const start = pparams.start;
   const logs = [];
   const log = (text, level = 'info') => logs.push({ time: new Date().toLocaleTimeString('zh-CN', { hour12:false }), text, level });
-  log(`正在规划路线（最大体力 ${routeMaxM}，1 体力 = 10m），避开 ${forbiddenZones.length} 个禁区`, 'info');
+  const originZone = forbiddenZones.find(z => z.type === 'origin');
+  const startInOrigin = Boolean(pparams.selfStartUsed && start && originZone && dist(start, originZone) <= originZone.radius);
+  // 玩家从原点内出发时，不以禁区阻断路线；改为在结果中提示路径风险。
+  const planningZones = startInOrigin ? [] : forbiddenZones;
+  log(startInOrigin
+    ? `检测到自己位于原点内：规划时忽略禁区，改为提示路径风险（最大体力 ${routeMaxM}）`
+    : `正在规划路线（最大体力 ${routeMaxM}，1 体力 = 10m），避开 ${forbiddenZones.length} 个禁区`, 'info');
 
   function buildOneRoute(available, availableAddonPool, label) {
     const rAddonPool = prefilterAddonPool(availableAddonPool, available.slice(0, 80), routeMaxM, start);
-    const route = planRoute(available, routeMaxM, start, rAddonPool, corridorWidthM, forbiddenZones);
+    const route = planRoute(available, routeMaxM, start, rAddonPool, corridorWidthM, planningZones);
     const routeIds = new Set(route.map(p => p.id));
     const scoreInfo = routeScore(route, availableAddonPool, corridorWidthM, start);
     const addonPlayers = scoreInfo.addon.filter(p => !routeIds.has(p.id)).map(p => ({ ...p, isAddon: true }));
+    const routeRisks = startInOrigin && route.length ? {
+      online: routeAddonPlayers(route, playerData.online || [], corridorWidthM, start),
+      highDrop: routeAddonPlayers(route, (playerData.allOfflinePlayers || []).filter(p => p.drop > 15 && !routeIds.has(p.id)), corridorWidthM, start)
+    } : null;
+    if (routeRisks && (routeRisks.online.length || routeRisks.highDrop.length)) log(`${label}路径风险：附近在线 ${routeRisks.online.length} 名；附近高 Drop 玩家 ${routeRisks.highDrop.length} 名`, 'warn');
     log(`${label}：经过 ${route.length} 个团，主 Drop ${scoreInfo.mainDrop} + 附加 ${scoreInfo.addonDrop}，收益 ${scoreInfo.totalDrop / 2}`, route.length ? 'success' : 'warn');
     return {
-      route, addonPlayers,
+      route, addonPlayers, routeRisks,
       routeDirection: route.length ? { start: route[0], end: route[route.length-1] } : null,
       routeLength: routeLen(route, start),
       routeDrop: scoreInfo.mainDrop,
@@ -541,7 +552,7 @@ function planRouteFromCache(playerData, params) {
     const missing = [];
     for (const id of customRouteIds) { const p = selectable.get(id); if (p) selected.push(p); else missing.push(id); }
     if (missing.length) log(`有 ${missing.length} 个已选节点当前不可用`, 'warn');
-    const solved = solveBestCustomRoute(selected, start, forbiddenZones, routeMaxM, addonPool, corridorWidthM);
+    const solved = solveBestCustomRoute(selected, start, planningZones, routeMaxM, addonPool, corridorWidthM);
     if (solved.ok) {
       log(`自定义路径计算完成：选择 ${solved.route.length}/${selected.length} 个团，获得总 Drop ${solved.score.totalDrop}，消耗体力 ${Math.round(solved.length * 10) / 10}${solved.skipped ? `，跳过 ${solved.skipped} 个以满足上限` : ''}`, 'success');
       const rIds = new Set(solved.route.map(p => p.id));
@@ -578,7 +589,6 @@ function planRouteFromCache(playerData, params) {
 
   // 仅当自己作为原点内起点时，提示离开原点路线可能遇到的风险。
   // 高 Drop 离线玩家按原点内成员显示；在线玩家还必须落在路径走廊附近。
-  const originZone = forbiddenZones.find(z => z.type === 'origin');
   const originThreats = [];
   if (pparams.selfStartUsed && start && originZone && dist(start, originZone) <= originZone.radius) {
     for (const r of routes) {
